@@ -1,51 +1,79 @@
-body {
- display: flex;
- flex-direction: column;
- justify-content: space-between;
- align-items: center;
- width: 100%;
- min-height: calc(100vh - 5%);
- margin: 5% auto;
- font-family: 'Courier New', Courier, monospace;
+* {
+  font-family: 'Courier New', Courier, monospace;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-* {
- font-family: 'Courier New', Courier, monospace;
+input,
+textarea {
+  border-radius: 20px;
+  border: 1px solid #000000;
+  outline: none;
+  width: 100%;
+  resize: none;
+  font-size: 18px;
+  padding: 20px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: calc(100vh - 5%);
+  height: 100vh;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 24px;
 }
 
 h1 {
-    margin: 0;
-    font-size: 5vw;
-    text-align: center;
-    margin-bottom: 2%;
+  margin: 0;
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 2%;
 }
 
-label {
-    font-size: 2vw;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 2%;
+.form__row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2%;
+}
+
+.form__choises {
+  display: flex;
+  /* justify-content: flex-start; */
+}
+
+.form__choise {
+  width: 20%;
+}
+
+.form__row__title {
+  display: block;
+  margin-left: 20px;
 }
 
 input {
-    border-radius: 1.5vw;
-    border: 1px solid #000000;
-    outline: none;
-    width: 100%;
-    height: 2vw;
+  height: 32px;
+}
+
+textarea {
+  height: 5%;
 }
 
 button {
-    width: 100%;
-    padding: 1vw 0;
-    border-radius: 1.5vw;
-    border: none;
-    background-color: rgb(152, 135, 135);
-    margin-top: 5%;
-    font-size: 2vw;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid #000000;
+  margin-top: 5%;
+  font-size: 24px;
 }
 
 .container {
-    width: 60%;
+  width: 60%;
+  max-width: 960px;
 }
-

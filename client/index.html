@@ -1,34 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
     <title>Form</title>
-</head>
-<body>
-    <h1>Отправить заявку</h1>
-    <div class="container">
-        <label>
-            <span>Имя</span>
-            <input id="name" type="text" maxlength="8">
-        </label>
-        <label>
-            <span>Телефон</span>
-            <input id="phone" type="tel">
-        </label>
-        <label>
-            <span>Описание заявки</span>
-            <input id="description" type="text">
-        </label>
-        <label>
-            <span>Заявка или помощь</span>
-            <input id="advice" type="text">
-        </label>
-        <button id="submit">Отправить</button>
+  </head>
+  <body>
+    <div class="form container">
+      <h1>Отправить заявку</h1>
+      <label class="form__row">
+        <span class="form__row__title">Имя</span>
+        <input id="name" type="text" minlength="8" />
+      </label>
+      <label class="form__row">
+        <span class="form__row__title">Телефон</span>
+        <input id="phone" type="tel" />
+      </label>
+      <label class="form__row">
+        <span class="form__row__title">Описание заявки</span>
+        <textarea id="description"></textarea>
+      </label>
+      <label class="form__row">
+        <span class="form__row__title">Заявка или помощь</span>
+        <div class="form__choises">
+          <input
+            class="form__choise"
+            name="form__choise"
+            id="form__choise1"
+            type="radio"
+          />
+          <input
+            class="form__choise"
+            name="form__choise"
+            id="form__choise2"
+            type="radio"
+          />
+        </div>
+      </label>
+      <button id="submit">Отправить</button>
     </div>
-
-</body>
-<script src="index.js"></script>
+  </body>
+  <script src="index.js"></script>
 </html>
