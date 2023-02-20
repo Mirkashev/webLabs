@@ -17,6 +17,8 @@ export default new class Api{
   }
 
   async sendRequest(params){
+    delete this.requestHeaders.body;
+
     this.requestHeaders.method = params.method;
     this.request = this.location + params.url;
 
@@ -44,6 +46,7 @@ export default new class Api{
   async get(params){
     let tempObject = params;
     tempObject.method = 'GET';
+
     return this.sendRequest(tempObject);
   }
 
@@ -69,8 +72,7 @@ export default new class Api{
   }
 
   async patch(params) {
-    params.e.preventDefault();
-
+    console.log(params)
     let tempObject = params;
     tempObject.method = 'PATCH';
 

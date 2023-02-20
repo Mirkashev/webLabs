@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import { PanelStageContext } from '../../store';
 
 export default function SelectList(props) {
+  console.log(props)
   async function getTablesList(){
     const data = props.data;
     console.log('render list')

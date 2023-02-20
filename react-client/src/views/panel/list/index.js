@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { CategoriesForm, RequestsForm } from "../../../components/form";
+import Form from "../../../components/form";
 import Api from "../../../services/api";
 import { DataContext } from "../../../store";
 import styles from './index.module.css'
@@ -9,20 +9,21 @@ export default function List(props) {
     Api.get({url:props.listType, cache:'reload'}).then((result) =>{
       return result.json()
     }).then((parsedData) => {
-      props.listType === 'categories' ?
-     updateCategories(parsedData) : 
-     updateRequests(parsedData)
+      if(props.listType === 'requests') {
+        updateRequests(parsedData)
+      }else {
+        updateCategories(parsedData)
+      }
     })
   }
 
   async function submit(id, e) {
-    // добавить трайкетчи потому что не всегда отправляется запрос и приходит промис
+    e.preventDefault();
+    // добавить трайкетчи потому что не всегда отправляется запрос и приходит промис и перенести сюда превент дефолт
     Api.patch({id:id, url:props.listType, e:e}).then((response) => {
       if(response.ok) {
         alert("Успешное редактирование!");
         updatePage();
-        // обновить кэш
-        // toggleUpdateData(true);
       }else {
         alert('Что-то пошло не так, повторите запрос позднее');
       }
@@ -36,8 +37,6 @@ export default function List(props) {
       if(response.ok) {
         alert("Успешное удаление!");
         updatePage();
-        // обновить кэш
-        // toggleUpdateData(true);
       }else {
         alert('Что-то пошло не так, повторите запрос позднее');
       }
@@ -46,31 +45,26 @@ export default function List(props) {
 
   const [list, setList] = useState([]);
 
-  const {updateCategories, updateRequests} = useContext(DataContext);
+  const {categories, requests, updateCategories, updateRequests} = useContext(DataContext);
 
   useEffect(()=> {
-    if(props.data !== null) {
-      // forms to one component
-      setList(props.data.map((element, index)=> props.listType === 'categories' ? 
-      <CategoriesForm 
+    console.log(categories)
+    const data = (props.listType === 'categories' ? categories : requests);
+
+    if(data !== null) {
+      setList(data.map((element, index)=> <Form 
+        formType={props.listType} 
         isList={true} 
         styles={styles} 
         key={props.listType + index} 
         submit={(e) => submit(element.id, e)} 
         element={element} 
         remove={(e) => remove(element.id, e)}
-      /> : 
-      <RequestsForm 
-        isList={true} 
-        styles={styles} 
-        key={props.listType + index} 
-        submit={(e) => submit(element.id, e)} 
-        element={element} 
-        remove={(e) => remove(element.id, e)}
+        categories={categories}
       />))
     }
 
-  }, [props.data])
+  }, [(props.listType === 'categories' ? categories : requests), props.listType])
 
   return list;
 }
