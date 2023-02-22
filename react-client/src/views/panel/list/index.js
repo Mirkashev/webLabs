@@ -5,50 +5,64 @@ import { DataContext } from "../../../store";
 import styles from './index.module.css'
 
 export default function List(props) {
-  async function updatePage(){
-    Api.get({url:props.listType, cache:'reload'}).then((result) =>{
-      return result.json()
-    }).then((parsedData) => {
-      if(props.listType === 'requests') {
-        updateRequests(parsedData)
-      }else {
-        updateCategories(parsedData)
-      }
-    })
-  }
-
-  async function submit(id, e) {
-    e.preventDefault();
-    // добавить трайкетчи потому что не всегда отправляется запрос и приходит промис и перенести сюда превент дефолт
-    Api.patch({id:id, url:props.listType, e:e}).then((response) => {
-      if(response.ok) {
-        alert("Успешное редактирование!");
-        updatePage();
-      }else {
-        alert('Что-то пошло не так, повторите запрос позднее');
-      }
-    })
-  }
-
-  async function remove(id, e) {
-    e.preventDefault();
-
-    Api.delete({id:id, url:props.listType}).then((response) => {
-      if(response.ok) {
-        alert("Успешное удаление!");
-        updatePage();
-      }else {
-        alert('Что-то пошло не так, повторите запрос позднее');
-      }
-    })
-  }
-
   const [list, setList] = useState([]);
-
   const {categories, requests, updateCategories, updateRequests} = useContext(DataContext);
 
   useEffect(()=> {
-    console.log(categories)
+    const updatePage = async function(){
+      try {
+        const response = await Api.get({url:props.listType, cache:'reload'});
+        const parsedData = response.json();
+    
+        if(response.ok) {
+          if(props.listType === 'requests') {
+            updateRequests(parsedData)
+          }else {
+            updateCategories(parsedData)
+          }
+        }else {
+          alert("При обновлении данных возникла ошибка, повторите позднее");
+        }
+      } catch (error) {
+        alert(error);
+      }
+    }
+  
+    const submit = async function(id, e){
+      e.preventDefault();
+      // добавить трайкетчи потому что не всегда отправляется запрос и приходит промис и перенести сюда превент дефолт
+      try {
+        const response = await Api.patch({id:id, url:props.listType, e:e});
+  
+        if(response.ok) {
+          alert("Успешное редактирование!");
+          updatePage();
+        }else {
+          alert('Что-то пошло не так, повторите запрос позднее');
+        }
+      } catch (error) {
+        alert(error);
+      }
+  
+    }
+  
+    const remove = async function(id, e){
+      e.preventDefault();
+  
+      try {
+        const response = await Api.delete({id:id, url:props.listType});
+  
+        if(response.ok) {
+          alert("Успешное удаление!");
+          updatePage();
+        }else {
+          alert('Что-то пошло не так, повторите запрос позднее');
+        }
+      } catch (error) {
+        alert(error);
+      }
+    }
+    // console.log(categories)
     const data = (props.listType === 'categories' ? categories : requests);
 
     if(data !== null) {
@@ -64,7 +78,7 @@ export default function List(props) {
       />))
     }
 
-  }, [(props.listType === 'categories' ? categories : requests), props.listType])
+  }, [categories, requests, updateCategories, updateRequests, props.listType])
 
   return list;
 }

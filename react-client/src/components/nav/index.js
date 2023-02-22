@@ -11,8 +11,10 @@ export default function Nav(props) {
   const { tables, updateTables } = useContext(DataContext);
 
   useEffect(()=>{
-    Api.get({url:'tables', cache:'force-cache'}).then((result) => (result.json()).then((parsedData) => updateTables(parsedData)))
-  }, [])
+    Api.get({url:'tables', cache:'force-cache'}).then((result) => {
+      (result.json()).then((parsedData) => updateTables(parsedData))
+    })
+  }, [updateTables])
 
   return(
     <div className={styles.wrapper}>

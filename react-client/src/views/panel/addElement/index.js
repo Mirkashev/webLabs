@@ -6,7 +6,7 @@ import { PanelStageContext, DataContext } from '../../../store';
 import styles from './index.module.css'
 export default function AddElement(props) {
 
-  async function updatePage(){
+  const updatePage = async function (){
     const response = await Api.get({url:stage, cache:'reload'});
     const parsedData = await response.json();
 
@@ -17,7 +17,7 @@ export default function AddElement(props) {
     }
   }
 
-  async function submit(e) {
+  const submit = async function (e) {
     e.preventDefault();
 
     try {

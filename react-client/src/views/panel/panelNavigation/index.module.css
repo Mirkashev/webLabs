@@ -1,0 +1,24 @@
+.search {
+  width: 80%;
+  max-width: 1024px;
+  margin: 0 auto;
+  border: 1px solid #000;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  position: fixed;
+  top: 42px;
+  background-color: #fff;
+  z-index: 1;
+}
+.search__item {
+  display: flex;
+}
+.search__input {
+  margin-right: 10px;
+}
+.search_extra_params {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+}
