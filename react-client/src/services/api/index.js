@@ -17,6 +17,9 @@ export default new class Api{
   }
 
   async sendRequest(params){
+    console.log(params, 'sr')
+    delete this.requestHeaders.body;
+
     this.requestHeaders.method = params.method;
     this.request = this.location + params.url;
 
@@ -28,9 +31,22 @@ export default new class Api{
       this.requestHeaders.cache = params.cache;
     }
 
-    if(!!params?.searchWord) {
-      const requestParams = `?search_word=${params.searchWord}`;
-      return await fetch(this.request + requestParams, this.requestHeaders)
+    if(!!params?.searchWord || !!params?.searchingParams) {
+      if(!!params?.searchWord && !!params?.searchingParams) {
+        const requestParams = `?search_word=${params.searchWord}&search_params=${params.searchingParams}`;
+        return await fetch(this.request + requestParams, this.requestHeaders)
+      }
+
+      if(!!params?.searchWord) {
+        const requestParams = `?search_word=${params.searchWord}`;
+        return await fetch(this.request + requestParams, this.requestHeaders)
+      }
+
+      if(!!params?.searchingParams) {
+        // console.log(params.searchingParams)
+        const requestParams = `?search_params=${params.searchingParams}`;
+        return await fetch(this.request + requestParams, this.requestHeaders)
+      }
     }
 
     if(!!params?.id) {
@@ -42,8 +58,10 @@ export default new class Api{
   }
 
   async get(params){
+    console.log('getq', params)
     let tempObject = params;
     tempObject.method = 'GET';
+
     return this.sendRequest(tempObject);
   }
 
@@ -69,8 +87,7 @@ export default new class Api{
   }
 
   async patch(params) {
-    params.e.preventDefault();
-
+    console.log(params)
     let tempObject = params;
     tempObject.method = 'PATCH';
 

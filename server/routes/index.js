@@ -9,7 +9,7 @@ router.get('/tables', async function(req, res) {
 })
 
 router.get('/categories', async function(req, res) {
-  const data = await query(`select * from categories where name like '%${!!req.query?.search_word ? req.query?.search_word : ''}%'`);
+  const data = await query(`select * from categories where name like '${!!req.query?.search_word ? req.query?.search_word : ''}%'`);
   res.send(data);
 })
 router.post('/categories', async function(req, res) {
@@ -38,9 +38,11 @@ router.patch('/categories', async function (req, res) {
 
 
 router.get('/requests', async function (req, res) {
+  console.log(req.query?.search_params);
   const data = await query(`SELECT * from requests where 
-  name like '%${!!req.query?.search_word ? req.query?.search_word : ''}%' 
-  or phone like '%${!!req.query?.search_word ? req.query?.search_word : ''}%'`);
+  (name like '${!!req.query?.search_word ? req.query?.search_word : ''}%' 
+  or phone like '${!!req.query?.search_word ? req.query?.search_word : ''}%') ${!!req.query?.search_params ? `and categories_id = ${req.query?.search_params}`: ''}`);
+  // and categories_id='${!!req.query?.search_params ? req.query?.search_params : ''}'`);
   res.send(data);
 });
 
