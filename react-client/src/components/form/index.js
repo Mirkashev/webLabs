@@ -2,7 +2,6 @@ import Category from "./category"
 import Request from "./request"
 
 export default function Form(props) {
-  console.log(props)
   return(
     <form 
       id={'form_' + props?.element?.id} 

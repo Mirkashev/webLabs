@@ -29,7 +29,8 @@ export default function Request(props) {
         name="description" 
         minLength='1' 
         maxLength="256" 
-        defaultValue={props?.element?.description}>
+        defaultValue={props?.element?.description}
+        >
       </textarea>
       <SelectList 
         data={props.categories}

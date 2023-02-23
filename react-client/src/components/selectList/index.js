@@ -2,8 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import { PanelStageContext } from '../../store';
 
 export default function SelectList(props) {
-  console.log(props)
-
   async function handleList(e){
     setSelectValue(e.target.value)
 
@@ -27,7 +25,6 @@ export default function SelectList(props) {
   useEffect(()=> {
     const getTablesList = async function () {
       const data = props.data;
-      console.log('render list')
   
       if(props.isSearchSettings && !data.find(element => element.id === 'reset')) {
         data.unshift({id:'reset', name:'Искать все категории'});
