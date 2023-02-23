@@ -39,8 +39,6 @@ export default function Panel(props) {
         requestParams.searchingParams = searchingParams;
         requestParams.cache = 'reload';
       }
-
-      console.log(requestParams);
   
       const response = await Api.get(requestParams);
       const parsedData = await response.json();
@@ -71,7 +69,7 @@ export default function Panel(props) {
             toggleAddForm={toggleAddForm}/> :
           <></>}
         <div className={styles.list__render_place}>
-          <List inputSearch={searchWord} listType={stage} />
+          <List inputSearch={searchWord} listType={stage}/>
         </div>
       </div>
     </div>  

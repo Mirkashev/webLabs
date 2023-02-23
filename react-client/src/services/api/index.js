@@ -17,7 +17,6 @@ export default new class Api{
   }
 
   async sendRequest(params){
-    console.log(params, 'sr')
     delete this.requestHeaders.body;
 
     this.requestHeaders.method = params.method;
@@ -43,7 +42,6 @@ export default new class Api{
       }
 
       if(!!params?.searchingParams) {
-        // console.log(params.searchingParams)
         const requestParams = `?search_params=${params.searchingParams}`;
         return await fetch(this.request + requestParams, this.requestHeaders)
       }
@@ -58,7 +56,6 @@ export default new class Api{
   }
 
   async get(params){
-    console.log('getq', params)
     let tempObject = params;
     tempObject.method = 'GET';
 
@@ -76,7 +73,7 @@ export default new class Api{
     const formData = new FormData(params.e.target)
     formData.forEach((value, key) => (reqBody[key] = value));
     tempObject.body = JSON.stringify(reqBody);
-    console.log(tempObject)
+
     return this.sendRequest(tempObject);
   }
 
@@ -87,7 +84,6 @@ export default new class Api{
   }
 
   async patch(params) {
-    console.log(params)
     let tempObject = params;
     tempObject.method = 'PATCH';
 
@@ -96,7 +92,7 @@ export default new class Api{
     const formData = new FormData(params.e.target)
     formData.forEach((value, key) => (reqBody[key] = value));
     tempObject.body = JSON.stringify(reqBody);
-    console.log(tempObject)
+
     return this.sendRequest(tempObject);
   }
 

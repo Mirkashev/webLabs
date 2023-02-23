@@ -62,20 +62,24 @@ export default function List(props) {
         alert(error);
       }
     }
-    // console.log(categories)
+    
     const data = (props.listType === 'categories' ? categories : requests);
 
+
     if(data !== null) {
+
       setList(data.map((element, index)=> <Form 
-        formType={props.listType} 
-        isList={true} 
-        styles={styles} 
-        key={props.listType + index} 
-        submit={(e) => submit(element.id, e)} 
-        element={element} 
-        remove={(e) => remove(element.id, e)}
-        categories={categories}
-      />))
+      formType={props.listType} 
+      isList={true} 
+      styles={styles} 
+      key={props.listType + element.id}
+      forInputs={props.listType + index} 
+      submit={(e) => submit(element.id, e)} 
+      element={element} 
+      remove={(e) => remove(element.id, e)}
+      categories={categories}
+    />))
+
     }
 
   }, [categories, requests, updateCategories, updateRequests, props.listType])

@@ -6,7 +6,6 @@ import Api from '../../services/api';
 import { DataContext } from '../../store';
 
 export default function Nav(props) {
-  console.log('rendering nav')
   let isAuth = props.page === "auth";
   const { tables, updateTables } = useContext(DataContext);
 
