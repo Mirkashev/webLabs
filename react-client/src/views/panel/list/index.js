@@ -12,7 +12,7 @@ export default function List(props) {
     const updatePage = async function(){
       try {
         const response = await Api.get({url:props.listType, cache:'reload'});
-        const parsedData = response.json();
+        const parsedData = await response.json();
     
         if(response.ok) {
           if(props.listType === 'requests') {
@@ -64,7 +64,6 @@ export default function List(props) {
     }
     
     const data = (props.listType === 'categories' ? categories : requests);
-
 
     if(data !== null) {
 

@@ -1,16 +1,50 @@
+import Api from "../../../services/api";
 import styles from "./index.module.css";
 
 export default function Login (props){
+  const submit = async function(e) {
+    e.preventDefault();
+    Api.post({url:'login', e:e}).then(async (result) => {
+      if(result.ok) {
+        const data = await result.json();
+
+        if(data.message) {
+          alert('Неправильный логин или пароль!');
+        }else {
+          // alert('Успешная регистрация!');
+          console.log('Успешный вход', data);
+          localStorage.setItem('token', data.accessToken);
+          props.toggleAuth(data.accessToken);
+        }
+      }else {
+        alert('Что-то пошло не так, повторите запрос позднее');
+      }
+    })
+  }
   return(
-    <form className={styles.form} action="" method="post">
+    <form className={styles.form} action="" onSubmit={submit}>
       <span className={styles.header}>Вход:</span>
-      <input className={styles.input} type='text' placeholder="Имя или логин пользователя"/>
-      <input className={styles.input} type='text' placeholder="Пароль пользователя"/>
+      <input 
+        className={styles.input} 
+        name='login' 
+        type='text' 
+        minLength={6} 
+        maxLength={64}  
+        placeholder="Логин пользователя" 
+        required/>
+      <input 
+        className={styles.input} 
+        name='password' 
+        type='password'         
+        minLength={6} 
+        maxLength={64}  
+        placeholder="Пароль пользователя" 
+        required/>
       <button className={styles.switch_type} onClick={(e)=>{
         e.preventDefault();
-        props.switchPageType(true);
+        props.toggleRegistration(true);
       } }>Ещё нет аккаунта?</button>
-      <input className={styles.submit} type='submit' />
+      <input className={styles.submit} value="Войти" type='submit' />
     </form>
   )
 }
