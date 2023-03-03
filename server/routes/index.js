@@ -8,36 +8,45 @@ const router = express.Router();
 
 const verification = async function(token) {
   return jwt.verify(token, accessTokenSecret, async function(err, decoded) {
-    return decoded?.role;
+    return decoded?.roles_id;
   });
 }
 
 const getRoleMiddleware = async function(req, res, next) {
-  const role = await verification(req?.headers?.authorization);
-  if(!!role) {
-    req.role = role;
+  const roles_id = await verification(req?.headers?.authorization);
+  console.log(roles_id, 'бред ебучий');
+  if(!!roles_id) {
+    req.roles_id = roles_id;
+    console.log(req.roles_id, 'tyt')
     next();
   }else {
+    console.log('real here')
     res.sendStatus(403);
   }
 }
 
 router.get('/tables', getRoleMiddleware, async function(req, res) {
-  if(!!req?.role) {
-    const data = await query('show tables');
+  if(!!req?.roles_id) {
+    let data = await query('show tables');
+    console.log(req?.roles_id)
+    if(req?.roles_id !== 3) {
+      data = data.filter((el) => el.Tables_in_weblabs !== 'users');
+    }
+    data = data.filter((el) => el.Tables_in_weblabs !== 'roles');
+
     res.send(data);
   }
 })
 
 router.get('/categories', getRoleMiddleware, async function(req, res) {
-  if(!!req?.role) {
+  if(!!req?.roles_id) {
     const data = await query(`select * from categories where name like '${!!req?.query?.search_word ? req?.query?.search_word : ''}%'`);
     res.send(data);
   }
 })
 
 router.post('/categories', getRoleMiddleware, async function(req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `INSERT INTO weblabs.categories (categories.name) values
         ('${req?.body?.name}')`
@@ -48,7 +57,7 @@ router.post('/categories', getRoleMiddleware, async function(req, res) {
 })
 
 router.delete('/categories', getRoleMiddleware, async function (req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `DELETE FROM weblabs.categories where id = ${req?.query?.id}`
     );
@@ -57,7 +66,7 @@ router.delete('/categories', getRoleMiddleware, async function (req, res) {
 });
 
 router.patch('/categories', getRoleMiddleware, async function (req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `update weblabs.categories set 
       categories.name = '${req?.body?.name}' 
@@ -68,7 +77,7 @@ router.patch('/categories', getRoleMiddleware, async function (req, res) {
 });
 
 router.get('/requests', getRoleMiddleware, async function (req, res) {
-  if(!!req?.role) {
+  if(!!req?.roles_id) {
       const data = await query(`SELECT * from requests where 
       (name like '${!!req?.query?.search_word ? req?.query?.search_word : ''}%' 
       or phone like '${!!req?.query?.search_word ? req?.query?.search_word : ''}%') 
@@ -79,7 +88,7 @@ router.get('/requests', getRoleMiddleware, async function (req, res) {
 });
 
 router.post('/requests', getRoleMiddleware, async function (req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `INSERT INTO weblabs.requests (requests.name, phone, 
         requests.description, requests.categories_id) values
@@ -90,7 +99,7 @@ router.post('/requests', getRoleMiddleware, async function (req, res) {
 });
 
 router.delete('/requests', getRoleMiddleware, async function (req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `DELETE FROM weblabs.requests where id = ${req?.query.id}`
     );
@@ -99,7 +108,7 @@ router.delete('/requests', getRoleMiddleware, async function (req, res) {
 });
 
 router.patch('/requests', getRoleMiddleware, async function (req, res) {
-  if(req?.role === 'moder' || req?.role === 'admin') {
+  if(req?.roles_id === 2 || req?.roles_id === 3) {
     const data = await query(
       `update weblabs.requests set 
       requests.name = '${req?.body?.name}', 
@@ -108,6 +117,42 @@ router.patch('/requests', getRoleMiddleware, async function (req, res) {
       requests.categories_id = '${req?.body?.categories_id}'
       where id = ${req?.query.id}`
     );
+    res.send(data);
+  }
+});
+
+router.get('/users', getRoleMiddleware, async function (req, res) {
+  if(req?.roles_id === 3) {
+      console.log('users id')
+      const data = await query(`SELECT * from users`);
+      res.send(data);
+    }
+});
+
+router.post('/users', getRoleMiddleware, async function (req, res) {
+  if(req?.roles_id === 3) {
+      const data = await query(`SELECT * from users`);
+      res.send(data);
+    }
+});
+
+router.patch('/users', getRoleMiddleware, async function (req, res) {
+  if(req?.roles_id === 3) {
+      const data = await query(`SELECT * from users`);
+      res.send(data);
+    }
+});
+
+router.delete('/users', getRoleMiddleware, async function (req, res) {
+  if(req?.roles_id === 3) {
+      const data = await query(`SELECT * from users`);
+      res.send(data);
+    }
+});
+
+router.get('/roles', getRoleMiddleware, async function (req, res) {
+  if(req?.roles_id === 3) {
+    const data = await query(`SELECT * FROM weblabs.roles`);
     res.send(data);
   }
 });
@@ -124,8 +169,9 @@ router.post('/login', async function(req, res) {
   if(!data[0]) {
     res.send({message:"Wrong login or password"});
   }else {
-    console.log({login: data[0].login, role: data[0].role});
-    jwt.sign({login: data[0].login, role: data[0].role}, accessTokenSecret, function(err, accessToken) {
+    console.log({login: data[0].login, roles_id: data[0].roles_id});
+
+    jwt.sign({login: data[0].login, roles_id: data[0].roles_id}, accessTokenSecret, function(err, accessToken) {
       res.json({accessToken});
     });
   }
@@ -139,7 +185,7 @@ router.post('/registration', async function(req, res) {
     `SELECT * FROM weblabs.users where login = '${login}'`
   );
 
-  console.log(!!checkData[0])
+  // console.log(!!checkData[0])
 
   if(!!checkData[0]) {
     // вернуть ошибку по правильному

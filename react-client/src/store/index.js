@@ -6,7 +6,9 @@ export const DataContext = createContext({
   categories:null,
   requests:null,
   tables:null,
+  users:null,
   updateCategories:()=>{},
   updateRequests:()=>{},
-  updateTables:()=>{}
+  updateTables:()=>{},
+  updateUsers:()=>{}
 })

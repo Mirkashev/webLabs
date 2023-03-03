@@ -5,7 +5,6 @@ import { useState } from "react";
 export default function Registration (props){
   async function submit(e){
     e.preventDefault();
-    console.log(e);
     Api.post({url:'registration', e:e}).then(async (result) => {
       if(result.ok) {
         const data = await result.json();

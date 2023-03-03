@@ -27,8 +27,6 @@ export default new class Api{
       this.requestHeaders.headers.authorization = `${localStorage.getItem('token')}`;
     }
 
-    console.log(this.requestHeaders)
-
     if(!!params?.body) {
       this.requestHeaders.body = params.body;
     }
@@ -80,7 +78,6 @@ export default new class Api{
     const formData = new FormData(params.e.target)
     formData.forEach((value, key) => (reqBody[key] = value));
     tempObject.body = JSON.stringify(reqBody);
-    console.log(tempObject.body);
 
     return this.sendRequest(tempObject);
   }

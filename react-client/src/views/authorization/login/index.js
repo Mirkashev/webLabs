@@ -12,7 +12,6 @@ export default function Login (props){
           alert('Неправильный логин или пароль!');
         }else {
           // alert('Успешная регистрация!');
-          console.log('Успешный вход', data);
           localStorage.setItem('token', data.accessToken);
           props.toggleAuth(data.accessToken);
         }
