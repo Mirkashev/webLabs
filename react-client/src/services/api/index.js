@@ -18,9 +18,14 @@ export default new class Api{
 
   async sendRequest(params){
     delete this.requestHeaders.body;
+    delete this.requestHeaders.headers.authorization;
 
     this.requestHeaders.method = params.method;
     this.request = this.location + params.url;
+
+    if(params.url !== 'login' || params.url !== 'register') {
+      this.requestHeaders.headers.authorization = `${localStorage.getItem('token')}`;
+    }
 
     if(!!params?.body) {
       this.requestHeaders.body = params.body;

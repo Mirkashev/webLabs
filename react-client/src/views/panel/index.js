@@ -15,15 +15,16 @@ export default function Panel(props) {
   const [searchingParams, setSearchingParams] = useState('');
 
   const {stage} = useContext(PanelStageContext);
-  const {updateCategories, updateRequests} = useContext(DataContext);
+  const {updateCategories, updateRequests, updateUsers} = useContext(DataContext);
   // нужно сервер настроить и убрать костыль(разобраться как на сервере отправлять ответ в префлайт - data is up to date)
   const [isFirstLoadRequests, toggleIsFirstLoadRequests] = useState('reload');
   const [isFirstLoadCategories, toggleIsFirstLoadCategories] = useState('reload');
+  const [isFirstLoadUsers, toggleIsFirstLoadUsers] = useState('reload');
   // search function
   useEffect(()=> {
     const getData = async function() {
       const isFirstLoad = (stage === 'categories' ? 
-      isFirstLoadCategories : isFirstLoadRequests);
+      isFirstLoadCategories : stage === 'requests' ? isFirstLoadRequests : isFirstLoadUsers);
 
       const requestParams = {
         url:stage, 
@@ -45,8 +46,12 @@ export default function Panel(props) {
   
       if(stage === 'requests') {
         updateRequests(parsedData)
-      }else {
+      }
+      if(stage === 'categories'){
         updateCategories(parsedData)
+      }
+      if(stage === 'users'){
+        updateUsers(parsedData)
       }
   
       if(stage === 'categories' && isFirstLoadCategories === 'reload') {
@@ -54,6 +59,9 @@ export default function Panel(props) {
       }
       if(stage === 'requests' && isFirstLoadRequests === 'reload') {
         toggleIsFirstLoadRequests('force-cache');
+      }
+      if(stage === 'users' && isFirstLoadUsers === 'reload') {
+        toggleIsFirstLoadUsers('force-cache');
       }
     }
 

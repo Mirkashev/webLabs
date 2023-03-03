@@ -1,25 +1,33 @@
 import { useState, useEffect, useContext } from "react";
 import Form from "../../../components/form";
 import Api from "../../../services/api";
-import { DataContext } from "../../../store";
+import { DataContext, PanelStageContext } from "../../../store";
 import styles from './index.module.css'
 
 export default function List(props) {
   const [list, setList] = useState([]);
-  const {categories, requests, updateCategories, updateRequests} = useContext(DataContext);
+  const {categories, requests, users, updateCategories, updateRequests, updateUsers} = useContext(DataContext);
+  const {stage} = useContext(PanelStageContext);
 
   useEffect(()=> {
     const updatePage = async function(){
       try {
         const response = await Api.get({url:props.listType, cache:'reload'});
-        const parsedData = response.json();
+        const parsedData = await response.json();
     
         if(response.ok) {
           if(props.listType === 'requests') {
-            updateRequests(parsedData)
-          }else {
-            updateCategories(parsedData)
+            updateRequests(parsedData);
           }
+
+          if(props.listType === 'categories') {
+            updateCategories(parsedData);
+          }
+
+          if(props.listType === 'users') {
+            updateUsers(parsedData);
+          }
+
         }else {
           alert("При обновлении данных возникла ошибка, повторите позднее");
         }
@@ -63,11 +71,9 @@ export default function List(props) {
       }
     }
     
-    const data = (props.listType === 'categories' ? categories : requests);
+    const data = stage === 'categories' ? categories : stage === 'requests' ? requests : users;
 
-
-    if(data !== null) {
-
+    if(!!data) {
       setList(data.map((element, index)=> <Form 
       formType={props.listType} 
       isList={true} 
@@ -79,10 +85,9 @@ export default function List(props) {
       remove={(e) => remove(element.id, e)}
       categories={categories}
     />))
-
     }
 
-  }, [categories, requests, updateCategories, updateRequests, props.listType])
+  }, [categories, requests, users, updateCategories, updateRequests, updateUsers, props.listType])
 
   return list;
 }

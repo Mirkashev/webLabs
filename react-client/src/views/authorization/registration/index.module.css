@@ -22,3 +22,8 @@
   border: none;
   color: rgb(36, 36, 184);
 }
+.show_password {
+  display: block;
+  margin-top: 8px;
+
+}

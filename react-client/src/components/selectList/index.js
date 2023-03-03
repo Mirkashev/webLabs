@@ -29,15 +29,18 @@ export default function SelectList(props) {
       if(props.isSearchSettings && !data.find(element => element.id === 'reset')) {
         data.unshift({id:'reset', name:'Искать все категории'});
       }
-  
-      updateList(data.map((element, index)=> 
-      <option 
-        key={'selectListKey: ' + index} 
-        value={!!element?.id ? element.id : Object.values(element)} 
-        disabled={Object.values(element)[0] === 'users'} 
-      >
-        { !!element?.id ? element.name : Object.values(element) }
-      </option>))
+      
+      if(!!data) {
+        updateList(data.map((element, index)=> 
+        <option 
+          key={'selectListKey: ' + index} 
+          value={!!element?.id ? element.id : Object.values(element)} 
+          // disabled={Object.values(element)[0] === 'users'} 
+        >
+          { !!element?.id ? element.name : Object.values(element) }
+        </option>))
+      }
+
     }
 
     if(props.data !== null) getTablesList();
