@@ -12,8 +12,12 @@ export default function AddElement(props) {
 
     if(stage === 'requests') {
       updateRequests(parsedData)
-    }else {
+    }
+    if(stage === 'categories') {
       updateCategories(parsedData)
+    }
+    if(stage === 'users') {
+      updateUsers(parsedData);
     }
   }
 
@@ -24,6 +28,13 @@ export default function AddElement(props) {
       const response = await Api.post({url:stage, e:e});
   
       if(response.ok) {
+        const data = await response.json();
+
+        if(data.message) {
+          alert('Данный логин уже используется!')
+          return;
+        }
+        
         alert("Запись добавлена!");
         updatePage();
         props.toggleAddForm(false)
@@ -37,7 +48,7 @@ export default function AddElement(props) {
   }
 
   const {stage} = useContext(PanelStageContext);
-  const {categories, updateCategories, updateRequests} = useContext(DataContext);
+  const {categories, updateCategories, updateRequests, updateUsers} = useContext(DataContext);
 
   return(
     <div className={styles.wrapper} onClick={()=> props.toggleAddForm(false)}>

@@ -14,10 +14,8 @@ const verification = async function(token) {
 
 const getRoleMiddleware = async function(req, res, next) {
   const roles_id = await verification(req?.headers?.authorization);
-  console.log(roles_id, 'бред ебучий');
   if(!!roles_id) {
     req.roles_id = roles_id;
-    console.log(req.roles_id, 'tyt')
     next();
   }else {
     console.log('real here')
@@ -47,12 +45,16 @@ router.get('/categories', getRoleMiddleware, async function(req, res) {
 
 router.post('/categories', getRoleMiddleware, async function(req, res) {
   if(req?.roles_id === 2 || req?.roles_id === 3) {
-    const data = await query(
-      `INSERT INTO weblabs.categories (categories.name) values
-        ('${req?.body?.name}')`
-    );
-    // send statusCode not data
-    res.send(data);
+    if(req?.body?.name.length > 1) {
+      const data = await query(
+        `INSERT INTO weblabs.categories (categories.name) values
+          ('${req?.body?.name}')`
+      );
+      // send statusCode not data
+      res.send(data);
+    }else {
+      res.sendStatus(400);
+    }
   }
 })
 
@@ -67,12 +69,14 @@ router.delete('/categories', getRoleMiddleware, async function (req, res) {
 
 router.patch('/categories', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 2 || req?.roles_id === 3) {
-    const data = await query(
-      `update weblabs.categories set 
-      categories.name = '${req?.body?.name}' 
-      where id = ${req?.query?.id}`
-    );
-    res.send(data);
+    if(req?.body?.name.length > 1) {
+      const data = await query(
+        `update weblabs.categories set 
+        categories.name = '${req?.body?.name}' 
+        where id = ${req?.query?.id}`
+      );
+      res.send(data);
+    }
   }
 });
 
@@ -89,12 +93,18 @@ router.get('/requests', getRoleMiddleware, async function (req, res) {
 
 router.post('/requests', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 2 || req?.roles_id === 3) {
-    const data = await query(
-      `INSERT INTO weblabs.requests (requests.name, phone, 
-        requests.description, requests.categories_id) values
-        ('${req?.body?.name}', '${req?.body?.phone}', '${req?.body?.description}', '${req?.body?.categories_id}')`
-    );
-    res.send(data);
+    if(req?.body?.name.length >= 1 
+      && req?.body?.phone.match(/^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/) 
+      && req?.body?.description.length >=1) {
+      const data = await query(
+        `INSERT INTO weblabs.requests (requests.name, phone, 
+          requests.description, requests.categories_id) values
+          ('${req?.body?.name}', '${req?.body?.phone}', '${req?.body?.description}', '${req?.body?.categories_id}')`
+      );
+      res.send(data);
+    }else {
+      res.sendStatus(400);
+    }
   }
 });
 
@@ -109,31 +119,50 @@ router.delete('/requests', getRoleMiddleware, async function (req, res) {
 
 router.patch('/requests', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 2 || req?.roles_id === 3) {
-    const data = await query(
-      `update weblabs.requests set 
-      requests.name = '${req?.body?.name}', 
-      requests.phone = '${req?.body?.phone}', 
-      requests.description = '${req?.body?.description}', 
-      requests.categories_id = '${req?.body?.categories_id}'
-      where id = ${req?.query.id}`
-    );
-    res.send(data);
+    if(req?.body?.name.length >= 1 
+      && req?.body?.phone.match(/^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/) 
+      && req?.body?.description.length >=1) {
+        const data = await query(
+          `update weblabs.requests set 
+          requests.name = '${req?.body?.name}', 
+          requests.phone = '${req?.body?.phone}', 
+          requests.description = '${req?.body?.description}', 
+          requests.categories_id = '${req?.body?.categories_id}'
+          where id = ${req?.query.id}`
+        );
+        res.send(data);
+      }else {
+        res.sendStatus(400);
+      }
   }
 });
 
 router.get('/users', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 3) {
       console.log('users id')
-      const data = await query(`SELECT * from users`);
+      const data = await query(`SELECT * from users ${!!req?.query?.search_word ? `where login = '${req?.query?.search_word}'` : ''}`);
       res.send(data);
     }
 });
 
 router.post('/users', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 3) {
-      const data = await query(`SELECT * from users`);
+    // console.log(req.body);
+    const {login, password, roles_id} = req?.body;
+
+    // if(login.length < )
+    const isLoginFree = (await query(
+      `SELECT * FROM weblabs.users where login = '${login}' and password = '${password}'`
+    ))[0];
+
+    if(!isLoginFree) {
+      const data = await query(`insert into users(login, password, roles_id) 
+      values('${login}', '${password}', '${roles_id}')`);
       res.send(data);
+    }else {
+      res.send({message:"This login already in use"});
     }
+  }
 });
 
 router.patch('/users', getRoleMiddleware, async function (req, res) {
@@ -145,7 +174,7 @@ router.patch('/users', getRoleMiddleware, async function (req, res) {
 
 router.delete('/users', getRoleMiddleware, async function (req, res) {
   if(req?.roles_id === 3) {
-      const data = await query(`SELECT * from users`);
+      const data = await query(`delete from users where id = ${req?.query?.id}`);
       res.send(data);
     }
 });
