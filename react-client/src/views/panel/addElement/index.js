@@ -26,15 +26,21 @@ export default function AddElement(props) {
 
     try {
       const response = await Api.post({url:stage, e:e});
-  
+      // console.log(response.ok)
+      
       if(response.ok) {
-        const data = await response.json();
+        // wrong construction, need to send status code
+        try {
+          const data = await response.json();
 
-        if(data.message) {
-          alert('Данный логин уже используется!')
-          return;
+          if(data.message) {
+            alert(data.message)
+            return;
+          }
+        } catch (error) {
+          
         }
-        
+
         alert("Запись добавлена!");
         updatePage();
         props.toggleAddForm(false)
