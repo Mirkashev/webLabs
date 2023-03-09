@@ -1,6 +1,6 @@
 const query = require('../query/index.js');
 
-const tablesService = new class TablesService{
+const tablesController = new class TablesController{
   async get(req, res){
     let data = await query('show tables');
 
@@ -14,4 +14,4 @@ const tablesService = new class TablesService{
   }
 }();
 
-module.exports = tablesService;
+module.exports = tablesController;

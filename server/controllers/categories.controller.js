@@ -1,6 +1,6 @@
 const query = require('../query/index.js');
 
-const categoriesService = new class CategoriesService{
+const categoriesController = new class CategoriesController{
   async get(req, res){
     const data = await query(`select * from categories${!!req.query?.search_word ? ` where name like '${req.query?.search_word}%'` : ''}`);
     res.send(data);
@@ -31,4 +31,4 @@ const categoriesService = new class CategoriesService{
   }
 }();
 
-module.exports = categoriesService;
+module.exports = categoriesController;

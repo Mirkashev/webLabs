@@ -1,6 +1,6 @@
 const query = require('../query/index.js');
 
-const requestsService = new class RequestsService{
+const requestsController = new class RequestsController{
   async get(req, res){
     const data = await query(`SELECT * from requests where 
     (name like '${!!req.query?.search_word ? req.query?.search_word : ''}%' 
@@ -39,4 +39,4 @@ const requestsService = new class RequestsService{
   }
 }();
 
-module.exports = requestsService;
+module.exports = requestsController;

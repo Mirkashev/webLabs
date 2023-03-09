@@ -1,18 +1,9 @@
-const jwt = require('jsonwebtoken');
+const jwt = require('../providers/jwt.service.js');
 
-class Middlewares{
-  constructor(secretWord) {
-    this.secretWord = secretWord; 
-  }
-
-  async verification(token, secretWord) {
-    return jwt.verify(token, secretWord, async function(err, decoded) {
-      return decoded?.roles_id;
-    });
-  }
-
-  isAuthorized = async (req, res, next) =>{
-    const roles_id = await this.verification(req?.headers?.authorization, this.secretWord);
+const middlewares = new class Middlewares{
+  //TODO: Переписать сендстатусы
+  async isAuthorized (req, res, next) {
+    const roles_id = await jwt.verification(req?.headers?.authorization);
     if(!!roles_id) {
       req.roles_id = roles_id;
       next();
@@ -88,6 +79,6 @@ class Middlewares{
     }
   }
 
-}
+}();
 
-module.exports = Middlewares;
+module.exports = middlewares;

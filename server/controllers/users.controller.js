@@ -1,6 +1,6 @@
 const query = require('../query/index.js');
 
-const usersService = new class UsersService{
+const usersController = new class UsersController{
 
   async get(req, res){
     const data = await query(`SELECT * from users ${!!req.query?.search_word ? `where login = '${req.query?.search_word}'` : ''}`);
@@ -40,4 +40,4 @@ const usersService = new class UsersService{
   }
 }();
 
-module.exports = usersService;
+module.exports = usersController;

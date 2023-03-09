@@ -1,6 +1,6 @@
 const query = require('../query/index.js');
 
-const registrationService = new class RegistrationService{
+const registrationController = new class RegistrationController{
   async post(req, res){
     const {login, password} = req.body;
 
@@ -19,4 +19,4 @@ const registrationService = new class RegistrationService{
   }
 }();
 
-module.exports = registrationService;
+module.exports = registrationController;
