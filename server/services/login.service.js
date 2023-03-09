@@ -1,5 +1,10 @@
 const query = require('../query/index.js');
 
+const jwt = require('jsonwebtoken');
+
+const accessTokenSecret = 'somesecrettext';
+
+
 const loginService = new class LoginService{
   async post(req, res){
     const {login, password} = req.body;

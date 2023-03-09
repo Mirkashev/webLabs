@@ -16,7 +16,7 @@ const requestsService = new class RequestsService{
         ('${req.body.name}', '${req.body.phone}', '${req.body.description}', '${req.body.categories_id}')`
     );
     // console.log(res);
-    res.status(200).send('created');
+    res.status(200).send({message:'created'});
   }
 
   async update(req, res){
@@ -28,14 +28,14 @@ const requestsService = new class RequestsService{
       requests.categories_id = '${req.body.categories_id}'
       where id = ${req.query.id}`
     );
-    res.status(200).send('updated');
+    res.status(200).send({message:'updated'});
   }
 
   async delete(req, res){
     await query(
       `DELETE FROM weblabs.requests where id = ${req.query.id}`
     );
-    res.status(200).send('deleted');
+    res.status(200).send({message:'deleted'});
   }
 }();
 

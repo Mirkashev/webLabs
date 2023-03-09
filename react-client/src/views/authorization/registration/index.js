@@ -6,17 +6,17 @@ export default function Registration (props){
   async function submit(e){
     e.preventDefault();
     Api.post({url:'registration', e:e}).then(async (result) => {
-      if(result.ok) {
-        const data = await result.json();
+      const data = await result.json();
 
-        if(data.message) {
-          alert('Данный логин уже используется!');
-        }else {
-          alert('Успешная регистрация!');
-          props.toggleRegistration(false);
-        }
+      if(result.ok) {
+        alert(data.message);
+        props.toggleRegistration(false);
       }else {
-        alert('Что-то пошло не так, повторите запрос позднее');
+        if(data.message) {
+          alert(data.message);
+        }else {
+          alert('Что-то пошло не так, повторите запрос позднее');
+        }
       }
     })
   }
