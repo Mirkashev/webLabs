@@ -24,31 +24,23 @@ export default function AddElement(props) {
   const submit = async function (e) {
     e.preventDefault();
 
-    try {
-      const response = await Api.post({url:stage, e:e});
-      // console.log(response.ok)
+    const response = await Api.post({url:stage, e:e});
       
-      if(response.ok) {
-        // wrong construction, need to send status code
-        try {
-          const data = await response.json();
+    if(response.ok) {
+      alert("Запись добавлена!");
+      updatePage();
+      props.toggleAddForm(false)
+    }else {
+      try {
+        const data = await response.json();
 
-          if(data.message) {
-            alert(data.message)
-            return;
-          }
-        } catch (error) {
-          
+        if(data.message) {
+          alert(data.message)
+          return;
         }
-
-        alert("Запись добавлена!");
-        updatePage();
-        props.toggleAddForm(false)
-      }else {
+      } catch (error) {
         alert('Что-то пошло не так, повторите запрос позднее');
       }
-    } catch (error) {
-      alert(error);
     }
 
   }

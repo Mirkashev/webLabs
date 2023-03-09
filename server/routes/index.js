@@ -24,7 +24,7 @@ router.post('/categories', middlewares.isAuthorized,
 
 router.delete('/categories', middlewares.isAuthorized, 
   middlewares.isRoleModer, middlewares.hasQueryId, categoriesService.delete);
-  
+
 router.patch('/categories', middlewares.isAuthorized, 
   middlewares.isRoleModer, middlewares.validation, 
   middlewares.hasQueryId, categoriesService.update);

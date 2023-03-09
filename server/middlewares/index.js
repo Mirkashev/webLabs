@@ -18,6 +18,7 @@ class Middlewares{
       next();
     }else {
       res.sendStatus(401);
+      return;
     }
   }
 
@@ -27,6 +28,7 @@ class Middlewares{
       next();
     }else {
       res.sendStatus(403);
+      return;
     }
   }
 
@@ -36,30 +38,40 @@ class Middlewares{
       next();
     }else {
       res.sendStatus(403);
+      return;
     }
   }
 
   async validation(req, res, next) {
     if(!!req?.body) {
+      let isValidationOk = true;
       for (const [key, value] of Object.entries(req.body)) {
         if(value.length >= 1 && value.length <= 255) {
           if(key === 'phone' && !value.match(/^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/)) {
-            res.sendStatus(400);
+            isValidationOk = false;
+            return;
           }
   
           if(key === 'login' && value.length < 6) {
-            res.sendStatus(400);
+            isValidationOk = false;
+            return;
           }
   
           if(key === 'password' && value.length < 6) {
-            res.sendStatus(400);
+            isValidationOk = false;
+            return;
           }
-          console.log('validation - OK');
-          next();
   
         }else {
-          res.sendStatus(400);
+          isValidationOk = false;
+          return;
         }
+      }
+      if(isValidationOk) {
+        console.log('validation - OK');
+        next();
+      }else {
+        res.sendStatus(400);
       }
     }else {
       res.sendStatus(400);
@@ -72,6 +84,7 @@ class Middlewares{
       next();
     }else {
       res.sendStatus(400);
+      return;
     }
   }
 

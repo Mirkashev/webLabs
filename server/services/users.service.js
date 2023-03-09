@@ -10,16 +10,16 @@ const usersService = new class UsersService{
   async post(req, res){
     const {login, password, roles_id} = req.body;
 
-    const isLoginFree = (await query(
-      `SELECT * FROM weblabs.users where login = '${login}' and password = '${password}'`
-    ))[0];
-  
-    if(!isLoginFree) {
+    const isLoginFree = await query(
+      `SELECT * FROM weblabs.users where login = '${login}';`
+    );
+
+    if(!isLoginFree[0]) {
       const data = await query(`insert into users(login, password, roles_id) 
       values('${login}', '${password}', '${roles_id}')`);
-      res.send(data);
+      res.status(201).send(data);
     }else {
-      res.send({message:"This login already in use"});
+      res.status(400).send({message:"This login already in use"});
     }
   }
 
@@ -31,12 +31,12 @@ const usersService = new class UsersService{
       users.roles_id = '${req.body.roles_id}'
       where id = ${req.query.id}`
     );
-    res.sendStatus(200);
+    res.status(200).send('updated');
   }
 
   async delete(req, res){
     await query(`delete from users where id = ${req.query.id}`);
-    res.sendStatus(200);
+    res.status(200).send('deleted');
   }
 }();
 
