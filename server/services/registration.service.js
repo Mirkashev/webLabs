@@ -14,7 +14,7 @@ const registrationService = new class RegistrationService{
       await query(
         `INSERT INTO weblabs.users(login, password) values ('${login}', '${password}')`
       );
-      res.sendStatus(200);
+      res.status(200).send('created');
     }
   }
 }();

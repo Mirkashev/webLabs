@@ -11,8 +11,7 @@ const categoriesService = new class CategoriesService{
       `INSERT INTO weblabs.categories (categories.name) values
         ('${req.body.name}')`
     );
-    console.log('status OK sended')
-    res.sendStatus(200);
+    res.status(200).send("created");
   }
 
   async update(req, res){
@@ -21,14 +20,14 @@ const categoriesService = new class CategoriesService{
       categories.name = '${req.body.name}' 
       where id = ${req.query.id}`
     );
-    res.sendStatus(200);
+    res.status(200).send('updated');
   }
 
   async delete(req, res){
     await query(
       `DELETE FROM weblabs.categories where id = ${req.query.id}`
     );
-    res.sendStatus(200);
+    res.status(200).send('deleted');
   }
 }();
 

@@ -9,7 +9,7 @@ const loginService = new class LoginService{
     );
     
     if(!data[0]) {
-      res.send({message:"Wrong login or password"});
+      res.status(400).send({message:"Wrong login or password"});
     }else {
       jwt.sign({login: data[0].login, roles_id: data[0].roles_id}, accessTokenSecret, function(err, accessToken) {
         res.json({accessToken});

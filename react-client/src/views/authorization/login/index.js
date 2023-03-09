@@ -5,18 +5,17 @@ export default function Login (props){
   const submit = async function(e) {
     e.preventDefault();
     Api.post({url:'login', e:e}).then(async (result) => {
-      if(result.ok) {
-        const data = await result.json();
+      const data = await result.json();
 
+      if(result.ok) {
+        localStorage.setItem('token', data.accessToken);
+        props.toggleAuth(data.accessToken);
+      }else {
         if(data.message) {
           alert('Неправильный логин или пароль!');
         }else {
-          // alert('Успешная регистрация!');
-          localStorage.setItem('token', data.accessToken);
-          props.toggleAuth(data.accessToken);
+          alert('Что-то пошло не так, повторите запрос позднее');
         }
-      }else {
-        alert('Что-то пошло не так, повторите запрос позднее');
       }
     })
   }
