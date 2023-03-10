@@ -64,7 +64,14 @@ export default function List(props) {
           alert("Успешное удаление!");
           updatePage();
         }else {
-          alert('Что-то пошло не так, повторите запрос позднее');
+          try {
+            const data = await response.json();
+            if(data.message) {
+              alert(data.message);
+            }
+          } catch (error) {
+            alert('Что-то пошло не так, повторите запрос позднее');
+          }
         }
       } catch (error) {
         alert(error);

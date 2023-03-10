@@ -10,33 +10,36 @@ const usersController = new class UsersController{
   async post(req, res){
     const {login, password, roles_id} = req.body;
 
-    const isLoginFree = await query(
-      `SELECT * FROM weblabs.users where login = '${login}';`
-    );
+    const data = await query(`insert into users(login, password, roles_id) 
+    values('${login}', '${password}', '${roles_id}')`);
 
-    if(!isLoginFree[0]) {
-      const data = await query(`insert into users(login, password, roles_id) 
-      values('${login}', '${password}', '${roles_id}')`);
-      res.status(201).send(data);
-    }else {
-      res.status(400).send({message:"This login already in use"});
-    }
+    res.status(201).send(data);
   }
 
   async update(req, res){
-    await query(
-      `update weblabs.users set 
-      users.login = '${req.body.login}', 
-      users.password = '${req.body.password}', 
-      users.roles_id = '${req.body.roles_id}'
-      where id = ${req.query.id}`
+    const {login, password, roles_id} = req.body;
+
+    const checkData = await query(
+      `SELECT * FROM weblabs.users where login = '${login}'`
     );
-    res.status(200).send('updated');
+
+    if(checkData[0]?.id === req.query.id) {
+      await query(
+        `update weblabs.users set 
+        users.login = '${login}', 
+        users.password = '${password}', 
+        users.roles_id = '${roles_id}'
+        where id = ${req.query.id}`
+      );
+      res.status(200).send({message:'updated'});
+    }else {
+      res.status(400).send({message:'This login already in use!'});
+    }
   }
 
   async delete(req, res){
     await query(`delete from users where id = ${req.query.id}`);
-    res.status(200).send('deleted');
+    res.status(200).send({message:'deleted'});
   }
 }();
 

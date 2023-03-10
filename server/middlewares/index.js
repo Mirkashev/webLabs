@@ -1,14 +1,13 @@
 const jwt = require('../providers/jwt.service.js');
-
+//TODO: переписать отдельными классами миделвейры
 const middlewares = new class Middlewares{
-  //TODO: Переписать сендстатусы
   async isAuthorized (req, res, next) {
     const roles_id = await jwt.verification(req?.headers?.authorization);
     if(!!roles_id) {
       req.roles_id = roles_id;
       next();
     }else {
-      res.sendStatus(401);
+      res.status(401).send({message: 'unauthorized'});
       return;
     }
   }
@@ -18,7 +17,7 @@ const middlewares = new class Middlewares{
       console.log('middleware moder - OK');
       next();
     }else {
-      res.sendStatus(403);
+      res.status(403).send({message: 'access denied'});
       return;
     }
   }
@@ -28,7 +27,7 @@ const middlewares = new class Middlewares{
       console.log('middleware admin - OK');
       next();
     }else {
-      res.sendStatus(403);
+      res.status(403).send({message: 'access denied'});
       return;
     }
   }
@@ -62,10 +61,10 @@ const middlewares = new class Middlewares{
         console.log('validation - OK');
         next();
       }else {
-        res.sendStatus(400);
+        res.status(400).send({message: 'invalid data'});
       }
     }else {
-      res.sendStatus(400);
+      res.status(400).send({message: 'invalid data'})
     }
   
   }
@@ -74,8 +73,22 @@ const middlewares = new class Middlewares{
     if(!!req.query?.id) {
       next();
     }else {
-      res.sendStatus(400);
+      res.status(400).send({message: 'invalid url params'});
       return;
+    }
+  }
+
+  async isLoginFree(req, res, next) {
+    const {login} = req.body;
+
+    const checkData = await query(
+      `SELECT * FROM weblabs.users where login = '${login}'`
+    );
+  
+    if(!!checkData[0]) {
+      res.status(400).send({message:"This login already in use"});
+    }else {
+      next();
     }
   }
 

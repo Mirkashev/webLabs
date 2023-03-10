@@ -15,8 +15,7 @@ const requestsController = new class RequestsController{
         requests.description, requests.categories_id) values
         ('${req.body.name}', '${req.body.phone}', '${req.body.description}', '${req.body.categories_id}')`
     );
-    // console.log(res);
-    res.status(200).send({message:'created'});
+    res.status(201).send({message:'created'});
   }
 
   async update(req, res){

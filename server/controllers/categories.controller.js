@@ -11,7 +11,7 @@ const categoriesController = new class CategoriesController{
       `INSERT INTO weblabs.categories (categories.name) values
         ('${req.body.name}')`
     );
-    res.status(200).send({message:'created'});
+    res.status(201).send({message:'created'});
   }
 
   async update(req, res){
@@ -24,10 +24,14 @@ const categoriesController = new class CategoriesController{
   }
 
   async delete(req, res){
-    await query(
+    const dbRes = await query(
       `DELETE FROM weblabs.categories where id = ${req.query.id}`
     );
-    res.status(200).send({message:'deleted'});
+    if(dbRes?.serverStatus === 2) {
+      res.status(200).send({message:'deleted'});
+    }else {
+      res.status(dbRes.status).send({message:dbRes.message});
+    }
   }
 }();
 

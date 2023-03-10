@@ -11,10 +11,10 @@ async function query(sql, params) {
     
   } catch (error) {
     console.log(error)
-    // if(error.errno == 1451) {
-    //   return {}
-    // }
-    return 500;
+    if(error.errno == 1451) {
+      return {status: 500, message:"Fk constraint fails"};
+    }
+    return {status: 500, message:"Unexpected error"};
   }
   
 }
