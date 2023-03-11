@@ -1,5 +1,7 @@
 const jwt = require('../providers/jwt.service.js');
+const query = require('../query/index.js');
 //TODO: переписать отдельными классами миделвейры
+
 const middlewares = new class Middlewares{
   async isAuthorized (req, res, next) {
     const roles_id = await jwt.verification(req?.headers?.authorization);
