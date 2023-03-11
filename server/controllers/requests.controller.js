@@ -2,10 +2,8 @@ const query = require('../query/index.js');
 
 const requestsController = new class RequestsController{
   async get(req, res){
-    const data = await query(`SELECT * from requests where 
-    (name like '${!!req.query?.search_word ? req.query?.search_word : ''}%' 
-    or phone like '${!!req.query?.search_word ? req.query?.search_word : ''}%') 
-    ${!!req.query?.search_params ? `and categories_id = ${req.query?.search_params}`: ''}`);
+    const data = await query(`SELECT * from requests ${!!req.query?.search_word ? 
+      `where categories_id IN (select id from categories where categories.name like '${req.query?.search_word}%')`:''}`);
     res.send(data);
   }
 

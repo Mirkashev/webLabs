@@ -54,15 +54,15 @@ export default function Panel(props) {
         updateUsers(parsedData)
       }
   
-      if(stage === 'categories' && isFirstLoadCategories === 'reload') {
-        toggleIsFirstLoadCategories('force-cache');
-      }
-      if(stage === 'requests' && isFirstLoadRequests === 'reload') {
-        toggleIsFirstLoadRequests('force-cache');
-      }
-      if(stage === 'users' && isFirstLoadUsers === 'reload') {
-        toggleIsFirstLoadUsers('force-cache');
-      }
+      // if(stage === 'categories' && isFirstLoadCategories === 'reload') {
+      //   toggleIsFirstLoadCategories('force-cache');
+      // }
+      // if(stage === 'requests') {
+      //   toggleIsFirstLoadRequests('force-cache');
+      // }
+      // if(stage === 'users' && isFirstLoadUsers === 'reload') {
+      //   toggleIsFirstLoadUsers('force-cache');
+      // }
     }
 
     getData();

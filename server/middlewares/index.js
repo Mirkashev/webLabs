@@ -86,7 +86,7 @@ const middlewares = new class Middlewares{
     );
   
     if(!!checkData[0]) {
-      res.status(400).send({message:"This login already in use"});
+      res.status(200).send({message:"This login already in use"});
     }else {
       next();
     }

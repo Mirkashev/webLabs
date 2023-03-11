@@ -10,7 +10,7 @@ const loginController = new class LoginController{
     );
     
     if(!data[0]) {
-      res.status(400).send({message:"Wrong login or password"});
+      res.status(200).send({message:"Wrong login or password"});
     }else {
       jwt.sign(data[0].login, data[0].roles_id, res);
     }

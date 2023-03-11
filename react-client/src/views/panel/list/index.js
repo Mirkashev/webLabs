@@ -38,18 +38,19 @@ export default function List(props) {
   
     const submit = async function(id, e){
       e.preventDefault();
-      // добавить трайкетчи потому что не всегда отправляется запрос и приходит промис и перенести сюда превент дефолт
       try {
         const response = await Api.patch({id:id, url:props.listType, e:e});
+        const data = await response.json();
   
         if(response.ok) {
-          alert("Успешное редактирование!");
           updatePage();
-        }else {
-          alert('Что-то пошло не так, повторите запрос позднее');
         }
+        
+        alert(data.message);
+
       } catch (error) {
-        alert(error);
+        alert('Что-то пошло не так, повторите запрос позднее');
+
       }
   
     }
@@ -59,22 +60,16 @@ export default function List(props) {
   
       try {
         const response = await Api.delete({id:id, url:props.listType});
+        const data = await response.json();
   
         if(response.ok) {
-          alert("Успешное удаление!");
           updatePage();
-        }else {
-          try {
-            const data = await response.json();
-            if(data.message) {
-              alert(data.message);
-            }
-          } catch (error) {
-            alert('Что-то пошло не так, повторите запрос позднее');
-          }
-        }
+        }        
+
+        alert(data.message);
+
       } catch (error) {
-        alert(error);
+        alert('Что-то пошло не так, повторите запрос позднее');
       }
     }
     

@@ -36,6 +36,7 @@ export default function Request(props) {
         data={props.categories}
         selectedElement={props?.element?.categories_id}
         name={'categories_id'}
+        key='selectListParamsSelection'
       />
     </>
   )

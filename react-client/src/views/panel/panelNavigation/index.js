@@ -18,7 +18,7 @@ export default function PanelNavigation(props) {
       }
 
       if(stage === 'requests') {
-        setInputPlaceholder('Поиск по имени или номеру телефона');
+        setInputPlaceholder('Поиск по категории');
       }
 
       if(stage === 'users') {
@@ -47,19 +47,20 @@ export default function PanelNavigation(props) {
           props.isAddFormShown ? props.toggleAddForm(false) : props.toggleAddForm(true)}>
             Добавить новую запись
         </button>
-        {stage === 'requests' ? 
+        {/* {stage === 'requests' ? 
           <button onClick={() => toggleSettings(!isSettingsShown)}>
             {isSettingsShown ? 
               'скрыть параметры поиска': 
               'показать параметры поиска'}
-          </button> : <></>}
+          </button> : <></>} */}
       </div>
-      {isSettingsShown && stage === 'requests' ? 
+      {/* В селект лист мы выбираем категорию и записываем в searchingparams */}
+      {/* {isSettingsShown && stage === 'requests' ? 
         <SelectList 
           setSearchingParams={props.setSearchingParams}
           isSearchSettings={true} 
           data={categories}/> : 
-        <></>}
+        <></>} */}
     </div>
   )
 }

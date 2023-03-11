@@ -11,8 +11,9 @@ async function query(sql, params) {
     
   } catch (error) {
     console.log(error)
+    // Переписать на status 200 
     if(error.errno == 1451) {
-      return {status: 500, message:"Fk constraint fails"};
+      return {status: 200, message:"Fk constraint fails"};
     }
     return {status: 500, message:"Unexpected error"};
   }

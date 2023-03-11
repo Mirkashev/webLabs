@@ -24,11 +24,12 @@ export default function SelectList(props) {
 
   useEffect(()=> {
     const getTablesList = async function () {
+      // избавиться от ссылки
       const data = props.data;
   
-      if(props.isSearchSettings && !data.find(element => element.id === 'reset')) {
-        data.unshift({id:'reset', name:'Искать все категории'});
-      }
+      // if(props.isSearchSettings && !data.find(element => element.id === 'reset')) {
+      //   data.unshift({id:'reset', name:'Искать все категории'});
+      // }
       
       if(!!data) {
         updateList(data.map((element, index)=> 

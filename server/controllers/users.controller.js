@@ -22,8 +22,8 @@ const usersController = new class UsersController{
     const checkData = await query(
       `SELECT * FROM weblabs.users where login = '${login}'`
     );
-
-    if(checkData[0]?.id === req.query.id) {
+    // console.log(roles_id, checkData[0]?.id, req.query.id);
+    if(+checkData[0]?.id === +req.query.id) {
       await query(
         `update weblabs.users set 
         users.login = '${login}', 
@@ -33,7 +33,7 @@ const usersController = new class UsersController{
       );
       res.status(200).send({message:'updated'});
     }else {
-      res.status(400).send({message:'This login already in use!'});
+      res.status(200).send({message:'This login already in use!'});
     }
   }
 
