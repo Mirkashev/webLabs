@@ -1,15 +1,30 @@
-import SelectList from "../../../components/selectList"
 import styles from "./index.module.css"
 import { useContext, useEffect, useState } from 'react';
 import { PanelStageContext, DataContext } from "../../../store";
+import Api from "../../../services/api";
 
 
 export default function PanelNavigation(props) {
-  const [isSettingsShown, toggleSettings] = useState(false)
   const [inputValue, setInputValue] = useState('');
   const [inputPlaceholder, setInputPlaceholder] = useState('Поиск по названию категории');
-  const {categories} = useContext(DataContext);
+  const {updateCategories, updateRequests, updateUsers} = useContext(DataContext);
   const {stage} = useContext(PanelStageContext);
+
+  const search = async () => {
+    const response = await Api.get({url:stage, searchWord: inputValue});
+    const data = await response.json();
+
+    switch (stage) {
+      case 'categories':
+        return updateCategories(data);
+      case 'requests':
+        return updateRequests(data);
+      case 'users':
+        return updateUsers(data);
+      default:
+        return;
+    }
+  }
 
   useEffect(()=>{
     const handlePlaceholder = ()=> {
@@ -28,6 +43,8 @@ export default function PanelNavigation(props) {
     }
 
     handlePlaceholder();
+
+    setInputValue('');
   }, [stage])
 
   return(
@@ -40,27 +57,14 @@ export default function PanelNavigation(props) {
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <button className={styles.search__button} onClick={()=>  props.goSearch(inputValue)}>Поиск</button>
+      <button className={styles.search__button} onClick={search}>Поиск</button>
       </div>
       <div className={styles.search_extra_params}>
         <button onClick={()=>
           props.isAddFormShown ? props.toggleAddForm(false) : props.toggleAddForm(true)}>
             Добавить новую запись
         </button>
-        {/* {stage === 'requests' ? 
-          <button onClick={() => toggleSettings(!isSettingsShown)}>
-            {isSettingsShown ? 
-              'скрыть параметры поиска': 
-              'показать параметры поиска'}
-          </button> : <></>} */}
       </div>
-      {/* В селект лист мы выбираем категорию и записываем в searchingparams */}
-      {/* {isSettingsShown && stage === 'requests' ? 
-        <SelectList 
-          setSearchingParams={props.setSearchingParams}
-          isSearchSettings={true} 
-          data={categories}/> : 
-        <></>} */}
     </div>
   )
 }

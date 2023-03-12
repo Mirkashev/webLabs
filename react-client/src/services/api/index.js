@@ -1,4 +1,4 @@
-export default new class Api{
+const api = new class Api{
   constructor(){
     this.location = 'http://localhost:3030/api/'
     this.requestHeaders = {
@@ -106,3 +106,5 @@ export default new class Api{
   }
 
 }();
+
+export default api;

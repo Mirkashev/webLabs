@@ -12,19 +12,19 @@ export default function List(props) {
   useEffect(()=> {
     const updatePage = async function(){
       try {
-        const response = await Api.get({url:props.listType, cache:'reload'});
+        const response = await Api.get({url:stage, cache:'reload'});
         const parsedData = await response.json();
     
         if(response.ok) {
-          if(props.listType === 'requests') {
+          if(stage === 'requests') {
             updateRequests(parsedData);
           }
 
-          if(props.listType === 'categories') {
+          if(stage === 'categories') {
             updateCategories(parsedData);
           }
 
-          if(props.listType === 'users') {
+          if(stage === 'users') {
             updateUsers(parsedData);
           }
 
@@ -39,7 +39,7 @@ export default function List(props) {
     const submit = async function(id, e){
       e.preventDefault();
       try {
-        const response = await Api.patch({id:id, url:props.listType, e:e});
+        const response = await Api.patch({id:id, url:stage, e:e});
         const data = await response.json();
   
         if(response.ok) {
@@ -59,7 +59,7 @@ export default function List(props) {
       e.preventDefault();
   
       try {
-        const response = await Api.delete({id:id, url:props.listType});
+        const response = await Api.delete({id:id, url:stage});
         const data = await response.json();
   
         if(response.ok) {
@@ -77,11 +77,11 @@ export default function List(props) {
 
     if(!!data) {
       setList(data.map((element, index)=> <Form 
-      formType={props.listType} 
+      formType={stage} 
       isList={true} 
       styles={styles} 
-      key={props.listType + element.id}
-      forInputs={props.listType + index} 
+      key={stage + element.id}
+      forInputs={stage + index} 
       submit={(e) => submit(element.id, e)} 
       element={element} 
       remove={(e) => remove(element.id, e)}
@@ -89,7 +89,7 @@ export default function List(props) {
     />))
     }
 
-  }, [categories, requests, users, updateCategories, updateRequests, updateUsers, props.listType])
+  }, [categories, requests, users, updateCategories, updateRequests, updateUsers, stage])
 
   return list;
 }

@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import { DataContext } from "../../../store";
 import SelectList from "../../selectList";
 
 export default function User(props) {
+  const {roles} = useContext(DataContext);
   return(
     <>
       <span className={props?.styles?.form__row__title}>Логин</span>
@@ -23,7 +26,7 @@ export default function User(props) {
       />
       <span className={props?.styles?.form__row__title}>Роль</span>
       <SelectList 
-        data={props.roles}
+        data={roles}
         selectedElement={props?.element?.roles_id}
         name={'roles_id'}
       />

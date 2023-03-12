@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Nav from './components/nav';
+import Api from './services/api';
 import { PanelStageContext, DataContext } from './store';
 import Authorization from './views/authorization';
 import Panel from './views/panel';
@@ -16,11 +17,22 @@ function App() {
   const [categories, updateCategories] = useState(null);
   const [requests, updateRequests] = useState(null);
   const [tables, updateTables] = useState(null);
+  const [roles, updateRoles] = useState(null);
+
+  useEffect(()=> {
+    (async ()=> {
+      const response = await Api.get({url:'categories', cache:'reload'});
+      const parsedData = await response.json();
+      updateCategories(parsedData);
+    })();
+
+  }, []);
 
   return (
     <div className='App'>
       <PanelStageContext.Provider value={{stage, setStage}}>
-        <DataContext.Provider value={{categories, requests, tables, users, updateCategories, updateRequests, updateTables, updateUsers}}>
+        <DataContext.Provider 
+          value={{categories, requests, tables, users, roles, updateCategories, updateRequests, updateTables, updateUsers, updateRoles}}>
           <Nav toggleAuth={toggleAuth} isAuth={isAuth} toggleRegistration={toggleRegistration} isRegistration={isRegistration}/>
           {!!isAuth ? <Panel/> : <Authorization isRegistration={isRegistration} toggleRegistration={toggleRegistration} toggleAuth={toggleAuth}/> }
         </DataContext.Provider>

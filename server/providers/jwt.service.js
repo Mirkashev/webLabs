@@ -15,6 +15,12 @@ const jwtService = new class JwtService{
     });
   }
 
+  async getLogin(token) {
+    return jwt.verify(token, accessTokenSecret, async function(err, decoded) {
+      return decoded?.login;
+    });
+  }
+
 }();
 
 module.exports = jwtService;

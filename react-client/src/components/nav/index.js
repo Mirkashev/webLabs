@@ -1,12 +1,12 @@
 import styles from './index.module.css'
 import { useContext, useEffect } from 'react'
 
-import SelectList from '../selectList';
 import Api from '../../services/api';
 import { DataContext } from '../../store';
+import SetStage from './setStage';
 
 export default function Nav(props) {
-  const { tables, updateTables } = useContext(DataContext);
+  const { updateTables } = useContext(DataContext);
 
   useEffect(()=>{
     if(!!props.isAuth) {
@@ -20,7 +20,7 @@ export default function Nav(props) {
     <div className={styles.wrapper}>
       <div className={styles.logo}>
         <span className={styles.logo__text}>Веб программирование</span>
-        {props.isAuth ? <SelectList data={tables} type={'tables'}/> : <></>}
+        {props.isAuth ? <SetStage/> : <></>}
       </div>
       <div className={styles.auth}>
         {!props.isAuth ?<>{!props.isRegistration ? <button onClick={()=> props.toggleRegistration(true)}>Регистрация</button> : 

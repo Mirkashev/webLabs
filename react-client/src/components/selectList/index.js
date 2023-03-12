@@ -1,13 +1,8 @@
-import { useContext, useEffect, useState } from 'react'
-import { PanelStageContext } from '../../store';
+import { useEffect, useState } from 'react'
 
 export default function SelectList(props) {
   async function handleList(e){
     setSelectValue(e.target.value)
-
-    if(props.type === 'tables') {
-      setStage(e.target.value)
-    }
 
     if(props.isSearchSettings) {
       if(e.target.value === 'reset') {
@@ -19,24 +14,15 @@ export default function SelectList(props) {
   }
 
   const [selectValue, setSelectValue] = useState(props.selectedElement);
-  const {setStage} = useContext(PanelStageContext);
   const [tablesList, updateList] = useState([]);
 
   useEffect(()=> {
     const getTablesList = async function () {
-      // избавиться от ссылки
-      const data = props.data;
-  
-      // if(props.isSearchSettings && !data.find(element => element.id === 'reset')) {
-      //   data.unshift({id:'reset', name:'Искать все категории'});
-      // }
-      
-      if(!!data) {
-        updateList(data.map((element, index)=> 
+      if(!!props.data) {
+        updateList(props.data.map((element, index)=> 
         <option 
           key={'selectListKey: ' + index} 
           value={!!element?.id ? element.id : Object.values(element)} 
-          // disabled={Object.values(element)[0] === 'users'} 
         >
           { !!element?.id ? element.name : Object.values(element) }
         </option>))

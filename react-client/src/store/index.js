@@ -7,8 +7,10 @@ export const DataContext = createContext({
   requests:null,
   tables:null,
   users:null,
+  roles: null,
   updateCategories:()=>{},
   updateRequests:()=>{},
   updateTables:()=>{},
-  updateUsers:()=>{}
+  updateUsers:()=>{},
+  updateRoles:()=>{}
 })

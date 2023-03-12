@@ -1,3 +1,4 @@
+const jwtService = require('../providers/jwt.service.js');
 const query = require('../query/index.js');
 
 const usersController = new class UsersController{
@@ -22,7 +23,7 @@ const usersController = new class UsersController{
     const checkData = await query(
       `SELECT * FROM weblabs.users where login = '${login}'`
     );
-    // console.log(roles_id, checkData[0]?.id, req.query.id);
+
     if(+checkData[0]?.id === +req.query.id) {
       await query(
         `update weblabs.users set 
@@ -38,8 +39,16 @@ const usersController = new class UsersController{
   }
 
   async delete(req, res){
-    await query(`delete from users where id = ${req.query.id}`);
-    res.status(200).send({message:'deleted'});
+    const checkData = await query(
+      `SELECT users.login FROM weblabs.users where id = ${+req.query.id}`
+    );
+
+    if(checkData[0]?.login === await jwtService.getLogin(req.headers.authorization)) {
+      res.status(200).send({message:'Cannot delete using user'});
+    }else {
+      await query(`delete from users where id = ${req.query.id}`);
+      res.status(200).send({message:'deleted'});
+    }
   }
 }();
 
