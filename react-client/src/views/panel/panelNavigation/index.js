@@ -28,13 +28,13 @@ export default function PanelNavigation(props) {
 
   useEffect(()=>{
     const handlePlaceholder = ()=> {
-      if(stage === 'categories') {
+      if(stage === 'categories' || stage === 'requests') {
         setInputPlaceholder('Поиск по названию категории');
       }
 
-      if(stage === 'requests') {
-        setInputPlaceholder('Поиск по категории');
-      }
+      // if(stage === 'requests') {
+      //   setInputPlaceholder('Поиск по категории');
+      // }
 
       if(stage === 'users') {
         console.log('here')

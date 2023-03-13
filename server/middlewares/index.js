@@ -4,7 +4,7 @@ const query = require('../query/index.js');
 
 const middlewares = new class Middlewares{
   async isAuthorized (req, res, next) {
-    const roles_id = await jwt.verification(req?.headers?.authorization);
+    const roles_id = await jwt.getRole(req?.headers?.authorization);
     if(!!roles_id) {
       req.roles_id = roles_id;
       next();

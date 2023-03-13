@@ -11,7 +11,13 @@ export default function Nav(props) {
   useEffect(()=>{
     if(!!props.isAuth) {
       Api.get({url:'tables', cache:'reload'}).then((result) => {
-        (result.json()).then((parsedData) => updateTables(parsedData))
+        (result.json()).then((parsedData) => {
+          if(result.ok) {
+            updateTables(parsedData)
+          }else {
+            alert(parsedData.message);
+          }
+        })
       })
     }
   }, [updateTables, props.isAuth])
@@ -23,11 +29,15 @@ export default function Nav(props) {
         {props.isAuth ? <SetStage/> : <></>}
       </div>
       <div className={styles.auth}>
-        {!props.isAuth ?<>{!props.isRegistration ? <button onClick={()=> props.toggleRegistration(true)}>Регистрация</button> : 
-        <button onClick={()=> props.toggleRegistration(false)}>Вход</button>}</> : <><button onClick={()=> {
-          props.toggleAuth('');
-          localStorage.removeItem('token');
-        }}>Выйти</button></>}
+        {
+          !props.isAuth ? 
+          <button onClick={()=> props.toggleRegistration(!props.isRegistration)}>
+            {!props.isRegistration ? 'Регистрация' : 'Вход'}</button> : 
+          <button onClick={()=> {
+            props.toggleAuth('');
+            localStorage.removeItem('token');
+          }}>Выйти</button>
+        }
       </div>
     </div>
   )

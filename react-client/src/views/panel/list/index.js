@@ -74,7 +74,7 @@ export default function List(props) {
     }
     
     const data = stage === 'categories' ? categories : stage === 'requests' ? requests : users;
-
+    console.log(data);
     if(!!data) {
       setList(data.map((element, index)=> <Form 
       formType={stage} 

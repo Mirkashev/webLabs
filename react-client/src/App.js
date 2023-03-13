@@ -1,4 +1,3 @@
-// import logo from './logo.svg';
 import { useEffect, useState } from 'react';
 import Nav from './components/nav';
 import Api from './services/api';
@@ -20,21 +19,45 @@ function App() {
   const [roles, updateRoles] = useState(null);
 
   useEffect(()=> {
-    (async ()=> {
-      const response = await Api.get({url:'categories', cache:'reload'});
-      const parsedData = await response.json();
-      updateCategories(parsedData);
-    })();
-
-  }, []);
+    if(isAuth) {
+      (async ()=> {
+        const response = await Api.get({url:'categories', cache:'reload'});
+        const parsedData = await response.json();
+        if(response.ok) {
+          updateCategories(parsedData);
+        }else {
+          alert(parsedData.message);
+        }
+      })();
+    }
+  }, [isAuth]);
 
   return (
     <div className='App'>
       <PanelStageContext.Provider value={{stage, setStage}}>
         <DataContext.Provider 
-          value={{categories, requests, tables, users, roles, updateCategories, updateRequests, updateTables, updateUsers, updateRoles}}>
-          <Nav toggleAuth={toggleAuth} isAuth={isAuth} toggleRegistration={toggleRegistration} isRegistration={isRegistration}/>
-          {!!isAuth ? <Panel/> : <Authorization isRegistration={isRegistration} toggleRegistration={toggleRegistration} toggleAuth={toggleAuth}/> }
+          value={{
+            categories, 
+            requests, 
+            tables, 
+            users, 
+            roles, 
+            updateCategories, 
+            updateRequests, 
+            updateTables, 
+            updateUsers, 
+            updateRoles}}>
+          <Nav 
+            toggleAuth={toggleAuth} 
+            isAuth={isAuth} 
+            toggleRegistration={toggleRegistration} 
+            isRegistration={isRegistration}/>
+          {!!isAuth ? 
+          <Panel/> : 
+          <Authorization 
+            isRegistration={isRegistration} 
+            toggleRegistration={toggleRegistration} 
+            toggleAuth={toggleAuth}/> }
         </DataContext.Provider>
       </PanelStageContext.Provider>
     </div>

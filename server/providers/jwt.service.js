@@ -11,14 +11,16 @@ const jwtService = new class JwtService{
 
   async verification(token) {
     return jwt.verify(token, accessTokenSecret, async function(err, decoded) {
-      return decoded?.roles_id;
+      return decoded;
     });
   }
 
   async getLogin(token) {
-    return jwt.verify(token, accessTokenSecret, async function(err, decoded) {
-      return decoded?.login;
-    });
+    return (await this.verification(token))?.login;
+  }
+
+  async getRole(token) {
+    return (await this.verification(token))?.roles_id;
   }
 
 }();

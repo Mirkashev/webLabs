@@ -1,6 +1,9 @@
+import { useContext } from "react";
+import { DataContext } from "../../../store";
 import SelectList from "../../selectList";
 
 export default function Request(props) {
+  const {categories} = useContext(DataContext);
   return(
     <>
       <span className={props?.styles?.form__row__title}>Имя</span>
@@ -33,7 +36,7 @@ export default function Request(props) {
         >
       </textarea>
       <SelectList 
-        data={props.categories}
+        data={categories}
         selectedElement={props?.element?.categories_id}
         name={'categories_id'}
         key='selectListParamsSelection'

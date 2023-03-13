@@ -23,19 +23,24 @@ export default function SetStage(props) {
     if(e.target.value === 'requests') {
       const response2 = await api.get({url:'categories'});
       const data2 = await response2.json();
-      contextUpdate('categories', data2);
+      if(response2.ok) contextUpdate('categories', data2);
+      else alert(data2.message);
     }
 
     if(e.target.value === 'users') {
       const response2 = await api.get({url:'roles'});
       const data2 = await response2.json();
-      contextUpdate('roles', data2);
+      if(response2.ok) contextUpdate('roles', data2);
+      else alert(data2.message);
     }
 
     const response = await api.get({url:e.target.value});
     const data = await response.json();
-    contextUpdate(e.target.value, data);
-    setStage(e.target.value);
+    if(response.ok) {
+      contextUpdate(e.target.value, data);
+      setStage(e.target.value);
+    }
+    else alert(data.message);
   }
 
   const [selectValue, setSelectValue] = useState(props.selectedElement);

@@ -15,7 +15,7 @@ export default function Form(props) {
     >
       {props.formType === 'categories' ? 
         <Category styles={props.styles} element={props.element}/> : props.formType === 'requests' ?
-        <Request styles={props.styles} element={props.element} categories={props?.categories}/> : 
+        <Request styles={props.styles} element={props.element}/> : 
         <User styles={props.styles} element={props.element}/>}
       <input className={props?.styles?.form__send} type="submit" value={'Сохранить'}/>
       {props.isList ? 
