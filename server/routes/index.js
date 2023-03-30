@@ -17,7 +17,7 @@ router.get('/tables', middlewares.isAuthorized, tablesController.get)
 
 
 // categories
-router.get('/categories', middlewares.isAuthorized, categoriesController.get);
+router.get('/categories', categoriesController.get);
 
 router.post('/categories', middlewares.isAuthorized, middlewares.isRoleModer, 
   middlewares.validation, categoriesController.post);

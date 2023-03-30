@@ -1,0 +1,11 @@
+.container {
+  height: 100vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  max-width: 720px !important;
+}
