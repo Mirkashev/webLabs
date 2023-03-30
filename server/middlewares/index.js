@@ -4,8 +4,10 @@ const query = require('../query/index.js');
 
 const middlewares = new class Middlewares{
   async isAuthorized (req, res, next) {
-    const roles_id = await jwt.getRole(req?.headers?.authorization);
-    if(!!roles_id) {
+    const { login, roles_id } = await jwt.verification(req?.headers?.authorization) || { login: false, roles_id: false };
+    const isLoginExists = (await query(`select login from users where login = '${login}'`))[0]?.login === login;
+    
+    if(isLoginExists) {
       req.roles_id = roles_id;
       next();
     }else {

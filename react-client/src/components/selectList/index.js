@@ -34,7 +34,7 @@ export default function SelectList(props) {
   }, [props.data])
 
   return(
-    <select name={props.name} onChange={handleList} value={selectValue}>
+    <select name={props.name} onChange={handleList} value={selectValue} disabled={localStorage.getItem('role') != 1 ? false: true}>
       {tablesList}
     </select>
   )

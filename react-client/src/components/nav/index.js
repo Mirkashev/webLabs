@@ -16,6 +16,9 @@ export default function Nav(props) {
             updateTables(parsedData)
           }else {
             alert(parsedData.message);
+            if(result.status === 401) {
+              localStorage.removeItem('token');
+            }
           }
         })
       })

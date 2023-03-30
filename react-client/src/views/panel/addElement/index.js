@@ -9,16 +9,21 @@ export default function AddElement(props) {
     const response = await Api.get({url:stage, cache:'reload'});
     const parsedData = await response.json();
 
-    if(stage === 'requests') {
-      console.log('addReq')
-      updateRequests(parsedData)
+    if(response.ok) {
+      if(stage === 'requests') {
+        console.log('addReq')
+        updateRequests(parsedData)
+      }
+      if(stage === 'categories') {
+        updateCategories(parsedData)
+      }
+      if(stage === 'users') {
+        updateUsers(parsedData);
+      }
+    }else {
+      alert(parsedData.message);
     }
-    if(stage === 'categories') {
-      updateCategories(parsedData)
-    }
-    if(stage === 'users') {
-      updateUsers(parsedData);
-    }
+
   }
 
   const submit = async function (e) {

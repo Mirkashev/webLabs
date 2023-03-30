@@ -17,10 +17,12 @@ export default function Form(props) {
         <Category styles={props.styles} element={props.element}/> : props.formType === 'requests' ?
         <Request styles={props.styles} element={props.element}/> : 
         <User styles={props.styles} element={props.element}/>}
-      <input className={props?.styles?.form__send} type="submit" value={'Сохранить'}/>
-      {props.isList ? 
-        <button className={props?.styles?.form__send} onClick={props?.remove}>Удалить</button> : 
-        <></>}
+        {localStorage.getItem('role') != 1 ?
+        <><input className={props?.styles?.form__send} type="submit" value={'Сохранить'}/>
+        {props.isList ? 
+          <button className={props?.styles?.form__send} onClick={props?.remove}>Удалить</button> : 
+          <></>}</>: <></>}
+      
     </form>
   )
 }

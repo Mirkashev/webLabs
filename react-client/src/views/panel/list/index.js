@@ -29,7 +29,7 @@ export default function List(props) {
           }
 
         }else {
-          alert("При обновлении данных возникла ошибка, повторите позднее");
+          alert(parsedData.message);
         }
       } catch (error) {
         alert(error);

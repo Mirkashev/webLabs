@@ -9,6 +9,7 @@ export default function Login (props){
 
       if(result.ok) {
         localStorage.setItem('token', data.accessToken);
+        localStorage.setItem('role', data.role);
         props.toggleAuth(data.accessToken);
       }else {
         if(data.message) {

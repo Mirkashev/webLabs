@@ -13,17 +13,24 @@ export default function PanelNavigation(props) {
   const search = async () => {
     const response = await Api.get({url:stage, searchWord: inputValue});
     const data = await response.json();
-
-    switch (stage) {
-      case 'categories':
-        return updateCategories(data);
-      case 'requests':
-        return updateRequests(data);
-      case 'users':
-        return updateUsers(data);
-      default:
-        return;
+    if(response.ok) {
+      switch (stage) {
+        case 'categories':
+          return updateCategories(data);
+        case 'requests':
+          return updateRequests(data);
+        case 'users':
+          return updateUsers(data);
+        default:
+          return;
+      }
+    }else {
+      alert(data.message);
+      if(response.status == 401) {
+        localStorage.removeItem('token');
+      }
     }
+
   }
 
   useEffect(()=>{
@@ -60,10 +67,10 @@ export default function PanelNavigation(props) {
       <button className={styles.search__button} onClick={search}>Поиск</button>
       </div>
       <div className={styles.search_extra_params}>
-        <button onClick={()=>
+        {localStorage.getItem('role') != 1 ? <button onClick={()=>
           props.isAddFormShown ? props.toggleAddForm(false) : props.toggleAddForm(true)}>
             Добавить новую запись
-        </button>
+        </button> : <></>}
       </div>
     </div>
   )

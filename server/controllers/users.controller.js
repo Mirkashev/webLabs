@@ -11,10 +11,10 @@ const usersController = new class UsersController{
   async post(req, res){
     const {login, password, roles_id} = req.body;
 
-    const data = await query(`insert into users(login, password, roles_id) 
+    await query(`insert into users(login, password, roles_id) 
     values('${login}', '${password}', '${roles_id}')`);
 
-    res.status(201).send(data);
+    res.status(201).send({message:'created'});
   }
 
   async update(req, res){
