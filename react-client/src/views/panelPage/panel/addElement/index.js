@@ -1,7 +1,7 @@
 import { useContext } from 'react';
-import Form from '../../../components/form';
-import Api from '../../../services/api';
-import { PanelStageContext, DataContext } from '../../../store';
+import Form from '../../../../components/form';
+import Api from '../../../../services/api';
+import { PanelStageContext, DataContext } from '../../../../store';
 
 import styles from './index.module.css'
 export default function AddElement(props) {

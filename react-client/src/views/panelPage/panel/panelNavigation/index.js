@@ -1,7 +1,7 @@
 import styles from "./index.module.css"
 import { useContext, useEffect, useState } from 'react';
-import { PanelStageContext, DataContext } from "../../../store";
-import Api from "../../../services/api";
+import { PanelStageContext, DataContext } from "../../../../store";
+import Api from "../../../../services/api";
 
 
 export default function PanelNavigation(props) {

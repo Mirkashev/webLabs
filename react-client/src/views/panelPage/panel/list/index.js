@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import Form from "../../../components/form";
-import Api from "../../../services/api";
-import { DataContext, PanelStageContext } from "../../../store";
+import Form from "../../../../components/form";
+import Api from "../../../../services/api";
+import { DataContext, PanelStageContext } from "../../../../store";
 import styles from './index.module.css'
 
 export default function List(props) {
